@@ -5,24 +5,42 @@ console.clear();
 
 // 連上線時的事件
 client.on('ready', () => {
-    // @ts-ignore
-    console.log(`Logged in as ${client.user.tag}!`);
+    if(client.user != null)
+        console.log(`Logged in as ${client.user.tag}!`);
+    else
+        console.log(`Login error, client.user == NULL`);
 });
 
 // 當 Bot 接收到訊息時的事件
 client.on('message', msg => {
-    // @ts-ignore
-    console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author}`);
-    // 如果訊息的內容是 'ping'
-    if (msg.content === 'ping') {
-        // 則 Bot 回應 'Pong'
-        msg.reply('pong');
-        console.log('ping');
-    }
-    if (msg.content.includes('選哪個')) {
-        msg.reply('都不選');
-        console.log('choice');
+    if(client.user != null && msg.author.tag != client.user.tag) {
+        console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel}`);
+        if (msg.content === 'ping') {
+            msg.reply('pong');
+        }
+        if (msg.content.includes('選哪個')) {
+            let choiceArr = msg.content.split(' ');
+            let target_index = choiceArr.indexOf('選哪個');
+            console.log(`target_index = ${target_index},choiceArr = ${choiceArr}`)
+            if (target_index > 0) {
+                let random_integer = Math.floor(Math.random()*target_index);
+                console.log(`${random_integer} are chosen`)
+                msg.reply(`選 ${choiceArr[random_integer]}`);
+            }
+            else
+                msg.reply("沒東西要選啥");
+        }
     }
 });
+
+client.on('messageDelete',delmsg => {
+    if(delmsg.author != null){
+        console.log(`${delmsg.author.tag} are trying to delete "${delmsg.content}"`);
+        delmsg.channel.send(`<@${delmsg.author.id}> are trying to delete the message "${delmsg.content}".`);
+        delmsg.channel.send(`<@${delmsg.author.id}>, always think before you sent.`);
+    }
+    else
+        console.log(`Error at client.on('messageDelete')`)
+})
 
 client.login(token);
