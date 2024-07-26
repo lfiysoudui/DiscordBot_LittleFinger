@@ -103,7 +103,7 @@ client.on('message', msg => {
             if (msg.guild) {
                 // 獲取所有成員
                 msg.guild.members.fetch().then(() => {
-                    // 過濾出非機器人成員
+                    // @ts-ignore 過濾出非機器人成員
                     let members = msg.guild.members.cache.filter(member => !member.user.bot);
                     
                     if (members.size > 0) {
