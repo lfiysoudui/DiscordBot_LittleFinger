@@ -77,10 +77,10 @@ client.on('message', msg => {
             }
         }
         // 查看素質排行
-        if (msg.content.startsWith('素質評比')) {
+        if (msg.content === '素質排行') {
             let sortedUsers = Object.entries(badWordsData.count).sort((a, b) => b[1] - a[1]);
             let leaderboard = '素質很好：\n';
-            
+
             sortedUsers.forEach(([userId, count], index) => {
                 leaderboard += `${index + 1}. <@${userId}>: ${count}\n`;
             });
