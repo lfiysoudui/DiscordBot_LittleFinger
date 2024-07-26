@@ -82,8 +82,8 @@ client.on('message', msg => {
             else if (command == 'list') {
                 let words = badWordsData.words;
                 let buf = "```\n";
-                words.forEach(word => {buf += `${word},`});
-                buf = buf.substring(0, buf.length - 1);
+                words.forEach(word => {buf += `${word}, `});
+                buf = buf.substring(0, buf.length - 2);
                 buf += "\n```";
                 msg.channel.send(buf);
             }
