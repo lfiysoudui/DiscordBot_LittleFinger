@@ -40,7 +40,7 @@ client.on('message', msg => {
             msg.react('😆');
         }
     }
-    if (msg.content.includes === '抽選') {
+    if (msg.content.includes('抽選')) {
         if (msg.guild) {
             try {
                 // 獲取所有成員
