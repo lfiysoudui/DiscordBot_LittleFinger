@@ -40,7 +40,7 @@ client.on('message', msg => {
             msg.react('😆');
         }
     }
-    if (msg.content === '抽選') {
+    if (msg.content.includes === '抽選') {
         if (msg.guild) {
             try {
                 // 獲取所有成員
@@ -52,7 +52,7 @@ client.on('message', msg => {
                 if (members.size > 0) {
                     // 隨機選擇一個成員
                     const randomMember = members.random();
-                    msg.channel.send(`抽選結果：<@${randomMember.id}>`);
+                    msg.channel.send(`抽到你了：<@${randomMember.id}>`);
                 } else {
                     msg.channel.send('沒有可供抽選的非機器人成員。');
                 }
