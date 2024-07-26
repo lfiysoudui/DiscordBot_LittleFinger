@@ -30,7 +30,7 @@ client.on('message', msg => {
             else
                 msg.reply("沒東西要選啥");
         }
-        if(msg.content.includes('評比') && (msg.channel.id === '1234094842695520296'|| msg.channel.id === '1266411217610608700')) {
+        if(msg.content.includes('評比') && (msg.channel.id === '1234094842695520296' || msg.channel.id === '1266411217610608700')) {
             // ❤️ ⛽ 😮 😭 😆
             // 語錄評比的 channel id: 1234094842695520296
             msg.react('❤️');
@@ -48,13 +48,15 @@ client.on('message', msg => {
                     
                     if (members.size > 0) {
                         // 隨機選擇一個成員
-                        const randomMember = members.random();
+                        let randomMember = members.random();
                         msg.channel.send(`抽到你了：<@${randomMember.id}>`);
-                    } else {
+                    } 
+                    else {
                         msg.channel.send('沒有可供抽選的非機器人成員。');
                     }
                 });
-            } else {
+            } 
+            else {
                 msg.channel.send('這個命令只能在伺服器中使用。');
             }
         }
