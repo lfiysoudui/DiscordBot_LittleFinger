@@ -1,7 +1,12 @@
 const Discord = require('discord.js');
 const { token } = require('./token.json');
+const fs = require('fs');
 const client = new Discord.Client();
 console.clear();
+
+// 讀取 bad words JSON 檔案
+let badWordsData = JSON.parse(fs.readFileSync('./badwords.json', 'utf8'));
+let userBadWordCount = {}; // 記錄使用 bad words 的次數
 
 // 連上線時的事件
 client.on('ready', () => {
@@ -13,11 +18,66 @@ client.on('ready', () => {
 
 // 當 Bot 接收到訊息時的事件
 client.on('message', msg => {
-    if(client.user != null && msg.author.tag != client.user.tag) {
+    if(client.user != null && !msg.author.bot) {
         console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel.id}`);
+        
+        // 檢查是否包含 bad words
+        let containsBadWord = false;
+        badWordsData.words.forEach(word => {
+            if (msg.content.includes(word)) {
+                containsBadWord = true;
+                // 記錄到 bot-log 頻道
+                let botLogChannel = msg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.isText());
+                if (botLogChannel) {
+                    botLogChannel.send(`<@${msg.author.id}> used a bad word: "${word}" in <#${msg.channel.id}>`);
+                }
+                // 更新使用者 bad words 次數
+                if (!userBadWordCount[msg.author.id]) {
+                    userBadWordCount[msg.author.id] = 0;
+                }
+                userBadWordCount[msg.author.id]++;
+            }
+        });
+
+        
+
+        // ping pong time!
         if (msg.content === 'ping') {
             msg.reply('pong');
         }
+
+        if (msg.content.startsWith('!addbadword ')) {
+            let newWord = msg.content.split(' ')[1];
+            if (!badWordsData.words.includes(newWord)) {
+                badWordsData.words.push(newWord);
+                fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
+                msg.reply(`The word "${newWord}" is added`);
+            } else {
+                msg.reply(`"${newWord}" is already a bad word.`);
+            }
+        }
+
+        if (msg.content.startsWith('!removebadword ')) {
+            let removeWord = msg.content.split(' ')[1];
+            if (badWordsData.words.includes(removeWord)) {
+                badWordsData.words = badWordsData.words.filter(word => word !== removeWord);
+                fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
+                msg.reply(`The word "${removeWord} is removed"`);
+            } else {
+                msg.reply(`"${removeWord}" is not in the bad words list.`);
+            }
+        }
+
+        if (msg.content === '!rank') {
+            let sortedUsers = Object.entries(userBadWordCount).sort((a, b) => b[1] - a[1]);
+            let leaderboard = '素質很好：\n';
+            sortedUsers.forEach(([userId, count], index) => {
+                leaderboard += `${index + 1}. <@${userId}>: ${count}\n`;
+            });
+            msg.channel.send(leaderboard);
+        }
+
+        // 選擇障礙moment
         if (msg.content.includes('選哪個')) {
             let choiceArr = msg.content.split(' ');
             let target_index = choiceArr.indexOf('選哪個');
@@ -52,7 +112,7 @@ client.on('message', msg => {
                         msg.channel.send(`抽到你了：<@${randomMember.id}>`);
                     } 
                     else {
-                        msg.channel.send('沒有可供抽選的非機器人成員。');
+                        msg.channel.send('沒有可以被抽的人😡');
                     }
                 });
             } 
