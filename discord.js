@@ -52,7 +52,7 @@ client.on('message', msg => {
                 if (members.size > 0) {
                     // 隨機選擇一個成員
                     const randomMember = members.random();
-                    msg.channel.send(`抽選結果：<@${randomMember.displayName}>`);
+                    msg.channel.send(`抽選結果：<@${randomMember.id}>`);
                 } else {
                     msg.channel.send('沒有可供抽選的非機器人成員。');
                 }
