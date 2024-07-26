@@ -30,8 +30,9 @@ client.on('message', msg => {
             else
                 msg.reply("沒東西要選啥");
         }
-        if(msg.content.includes('評比')) {
+        if(msg.content.includes('評比') && msg.channel.id==1234094842695520296) {
             // ❤️ ⛽ 😮 😭 😆
+            // 語錄評比的 channel id: 1234094842695520296
             msg.react('❤️');
             msg.react('⛽');
             msg.react('😮');
