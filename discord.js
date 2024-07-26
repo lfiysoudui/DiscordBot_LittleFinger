@@ -74,7 +74,7 @@ client.on('messageDelete', delmsg => {
             let TargetChannel = delmsg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.type === 'text');
             if (TargetChannel && TargetChannel.isText()) {
                 let botlog_msg=`**Deleted Message Log :**\n`;
-                botlog_msg+=`Author: <@${delmsg.author.id}>\nChannel: <#${delmsg.channel.id}>\n Created Time: ${delmsg.createdAt} \n`;
+                botlog_msg+=`Author: <@${delmsg.author.id}>\nChannel: <#${delmsg.channel.id}>\nCreated Time: ${delmsg.createdAt} \n`;
                 botlog_msg+=`================================\n${delmsg.content}\n================================\n`;
                 (TargetChannel).send(botlog_msg);
             }
