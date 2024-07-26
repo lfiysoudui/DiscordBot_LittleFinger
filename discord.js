@@ -12,7 +12,7 @@ client.on('ready', () => {
 });
 
 // 當 Bot 接收到訊息時的事件
-client.on('message', msg => {
+client.on('message', async msg => {
     if(client.user != null && msg.author.tag != client.user.tag) {
         console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel.id}`);
         if (msg.content === 'ping') {
@@ -37,6 +37,30 @@ client.on('message', msg => {
             msg.react('😮');
             msg.react('😭');
             msg.react('😆');
+        }
+    }
+    if (msg.content === '抽選成員') {
+        if (msg.guild) {
+            try {
+                // 獲取所有成員
+                await msg.guild.members.fetch();
+                
+                // 過濾出非機器人成員
+                const members = msg.guild.members.cache.filter(member => !member.user.bot);
+                
+                if (members.size > 0) {
+                    // 隨機選擇一個成員
+                    const randomMember = members.random();
+                    msg.channel.send(`抽選結果：<@${randomMember.id}>`);
+                } else {
+                    msg.channel.send('沒有可供抽選的非機器人成員。');
+                }
+            } catch (error) {
+                console.error('抽選成員時發生錯誤:', error);
+                msg.channel.send('抽選成員時發生錯誤，請稍後再試。');
+            }
+        } else {
+            msg.channel.send('這個命令只能在伺服器中使用。');
         }
     }
 });
