@@ -71,40 +71,32 @@ client.on('message', msg => {
                     msg.reply(`"${removeWord}" is not in the bad words list.`);
                 }
             }
-            else {
-                const helpmessage = "```\n!rank:\n    add <word>:新增詞語\n    remove <word>:刪除詞語\n素質排行:展示素質排行```"
-                msg.channel.send(helpmessage)
+            else if (command == 'words') {
+                let words = badWordsData.words;
+                let buf = "```\n";
+                words.forEach(word => {buf += `${word},`});
+                buf = buf.substring(0, buf.length - 1);
+                buf += "\n```";
+                msg.channel.send(buf);
             }
-        }
-        if (msg.content.startsWith('!rank')) {
-            let command
-            if (msg.content == '!rank') command = 'help'
-            else command = msg.content.split('!rank ')[1]
-            console.log(`get command rank ${command}`)
-            // 增加素質詞彙
-            if (command.startsWith('add ')) {
-                let newWord = command.split(' ')[1];
-                if (!badWordsData.words.includes(newWord)) {
-                    badWordsData.words.push(newWord);
-                    fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
-                    msg.reply(`The word "${newWord}" is added`);
-                } else {
-                    msg.reply(`"${newWord}" is already a bad word.`);
-                }
+            else if (command == 'list') {
+                let words = badWordsData.words;
+                let buf = "```\n";
+                words.forEach(word => {buf += `${word},`});
+                buf = buf.substring(0, buf.length - 1);
+                buf += "\n```";
+                msg.channel.send(buf);
             }
-            // 去除素質詞彙
-            else if (command.startsWith('remove ')) {
-                let removeWord = command.split(' ')[1];
-                if (badWordsData.words.includes(removeWord)) {
-                    badWordsData.words = badWordsData.words.filter(word => word !== removeWord);
-                    fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
-                    msg.reply(`The word "${removeWord} is removed"`);
-                } else {
-                    msg.reply(`"${removeWord}" is not in the bad words list.`);
-                }
+            else if (command == 'show') {
+                let sortedUsers = Object.entries(badWordsData.count).sort((a, b) => b[1] - a[1]);
+                let leaderboard = '素質很好：\n';
+                sortedUsers.forEach(([userId, count], index) => {
+                    leaderboard += `${index + 1}. <@${userId}>: ${count}\n`;
+                });
+                msg.channel.send(leaderboard);
             }
             else {
-                const helpmessage = "```\n!rank:\n    add <word>:新增詞語\n    remove <word>:刪除詞語\n素質排行:展示素質排行```"
+                const helpmessage = "```\n!rank:\n    add <word>:新增詞語\n    remove <word>:刪除詞語\n    list:列出詞語\n    show:列出完整素質排行榜\n素質排行:展示素質排行前10名\n```"
                 msg.channel.send(helpmessage)
             }
         }
@@ -112,10 +104,10 @@ client.on('message', msg => {
         if (msg.content === '素質排行') {
             let sortedUsers = Object.entries(badWordsData.count).sort((a, b) => b[1] - a[1]);
             let leaderboard = '素質很好：\n';
-
-            sortedUsers.forEach(([userId, count], index) => {
-                leaderboard += `${index + 1}. <@${userId}>: ${count}\n`;
-            });
+            for (let i = 0; i < 10 && i < sortedUsers.length; i++) {
+                const [userId, count] = sortedUsers[i];
+                leaderboard += `${i + 1}. <@${userId}>: ${count}\n`;
+            }
             msg.channel.send(leaderboard);
         }
 
