@@ -30,6 +30,14 @@ client.on('message', msg => {
             else
                 msg.reply("沒東西要選啥");
         }
+        if(msg.content.includes('評比')) {
+            // ❤️ ⛽ 😮 😭 😆
+            msg.react('❤️');
+            msg.react('⛽');
+            msg.react('😮');
+            msg.react('😭');
+            msg.react('😆');
+        }
     }
 });
 
