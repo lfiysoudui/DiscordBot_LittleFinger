@@ -74,6 +74,8 @@ client.on('message', msg => {
             else {
                 const helpmessage = "```\n!rank:\n    add <word>:新增詞語\n    remove <word>:刪除詞語\n素質排行:展示素質排行```"
                 msg.channel.send(helpmessage)
+            }
+        }
         if (msg.content.startsWith('!rank')) {
             let command
             if (msg.content == '!rank') command = 'help'
