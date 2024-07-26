@@ -28,7 +28,7 @@ client.on('message', msg => {
         //* 素質排行
         // 檢查是否包含 bad words
         let containsBadWord = false;
-        if (!msg.content.includes('!rank'))
+        if (!msg.content.includes('$rank'))
             badWordsData.words.forEach(word => {
                 if (msg.content.includes(word) && msg.guild) {
                     containsBadWord = true;
@@ -45,10 +45,10 @@ client.on('message', msg => {
                     fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
                 }
             });
-        if (msg.content.startsWith('!rank')) {
+        if (msg.content.startsWith('$rank')) {
             let command
-            if (msg.content == '!rank') command = 'help'
-            else command = msg.content.split('!rank ')[1]
+            if (msg.content == '$rank') command = 'help'
+            else command = msg.content.split('rank ')[1]
             console.log(`get command rank ${command}`)
             // 增加素質詞彙
             if (command.startsWith('add ')) {
@@ -97,7 +97,7 @@ client.on('message', msg => {
                 msg.channel.send(leaderboard);
             }
             else {
-                const helpmessage = "```\n!rank:\n    add <word>:新增詞語\n    remove <word>:刪除詞語\n    list:列出詞語\n    show:列出完整素質排行榜\n素質排行:展示素質排行前10名\n```"
+                const helpmessage = "```\n$rank:\n    add <word>:新增詞語\n    remove <word>:刪除詞語\n    list:列出詞語\n    show:列出完整素質排行榜\n素質排行:展示素質排行前10名\n```"
                 msg.channel.send(helpmessage)
             }
         }
