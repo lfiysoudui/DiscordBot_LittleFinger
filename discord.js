@@ -28,22 +28,23 @@ client.on('message', msg => {
         //* 素質排行
         // 檢查是否包含 bad words
         let containsBadWord = false;
-        badWordsData.words.forEach(word => {
-            if (msg.content.includes(word) && msg.guild) {
-                containsBadWord = true;
-                // 記錄到 bot-log 頻道
-                let botLogChannel = msg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.isText());
-                if (botLogChannel && botLogChannel.isText()) {
-                    botLogChannel.send(`<@${msg.author.id}> used a bad word: "${word}" in <#${msg.channel.id}>`);
+        if (!msg.content.includes('!rank'))
+            badWordsData.words.forEach(word => {
+                if (msg.content.includes(word) && msg.guild) {
+                    containsBadWord = true;
+                    // 記錄到 bot-log 頻道
+                    let botLogChannel = msg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.isText());
+                    if (botLogChannel && botLogChannel.isText()) {
+                        botLogChannel.send(`<@${msg.author.id}> used a bad word: "${word}" in <#${msg.channel.id}>`);
+                    }
+                    // 更新使用者 bad words 次數
+                    if (!badWordsData.count[msg.author.id]) {
+                        badWordsData.count[msg.author.id] = 0;
+                    }
+                    badWordsData.count[msg.author.id]++;
+                    fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
                 }
-                // 更新使用者 bad words 次數
-                if (!badWordsData.count[msg.author.id]) {
-                    badWordsData.count[msg.author.id] = 0;
-                }
-                badWordsData.count[msg.author.id]++;
-                fs.writeFileSync('./badwords.json', JSON.stringify(badWordsData, null, 2));
-            }
-        });
+            });
         if (msg.content.startsWith('!rank')) {
             let command
             if (msg.content == '!rank') command = 'help'
