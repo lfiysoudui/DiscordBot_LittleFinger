@@ -14,7 +14,7 @@ client.on('ready', () => {
 // 當 Bot 接收到訊息時的事件
 client.on('message', msg => {
     if(client.user != null && msg.author.tag != client.user.tag) {
-        console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel}`);
+        console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel.id}`);
         if (msg.content === 'ping') {
             msg.reply('pong');
         }
@@ -33,11 +33,10 @@ client.on('message', msg => {
     }
 });
 
-client.on('messageDelete',delmsg => {
+client.on('messageDelete', delmsg => {
     if(delmsg.author != null){
-        console.log(`${delmsg.author.tag} are trying to delete "${delmsg.content}"`);
-        delmsg.channel.send(`<@${delmsg.author.id}> are trying to delete the message "${delmsg.content}".`);
-        delmsg.channel.send(`<@${delmsg.author.id}>, always think before you send.`);
+        console.log(`${delmsg.author.tag} is trying to delete "${delmsg.content}"`);
+        delmsg.channel.send(`<@${delmsg.author.id}> is trying to delete the message "${delmsg.content}", always think before you send.`);
     }
     else
         console.log(`Error at client.on('messageDelete')`)
