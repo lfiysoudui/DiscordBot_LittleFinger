@@ -69,7 +69,12 @@ client.on('message', msg => {
 client.on('messageDelete', delmsg => {
     if(delmsg.author != null){
         console.log(`${delmsg.author.tag} is trying to delete "${delmsg.content}"`);
-        delmsg.channel.send(`<@${delmsg.author.id}> is trying to delete the message "${delmsg.content}", always think before you send.`);
+        delmsg.channel.send(`<@${delmsg.author.id}> is trying to delete message , always think before you send.`);
+        if(delmsg.guild != null){
+            let TargetChannel = delmsg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.type === 'text');
+            if (TargetChannel && TargetChannel.isText()) (TargetChannel).send(`deleted message log : <@${delmsg.author.id}>  "${delmsg.content}"`)
+            else console.log(`'bot-log' channel isn't found`);
+        }
     }
     else
         console.log(`Error at client.on('messageDelete')`)
