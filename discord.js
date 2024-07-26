@@ -37,7 +37,7 @@ client.on('messageDelete',delmsg => {
     if(delmsg.author != null){
         console.log(`${delmsg.author.tag} are trying to delete "${delmsg.content}"`);
         delmsg.channel.send(`<@${delmsg.author.id}> are trying to delete the message "${delmsg.content}".`);
-        delmsg.channel.send(`<@${delmsg.author.id}>, always think before you sent.`);
+        delmsg.channel.send(`<@${delmsg.author.id}>, always think before you send.`);
     }
     else
         console.log(`Error at client.on('messageDelete')`)
