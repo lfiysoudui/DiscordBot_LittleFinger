@@ -163,16 +163,22 @@ client.on('message', msg => {
 client.on('messageDelete', delmsg => {
     if(delmsg.author != null){
         console.log(`${delmsg.author.tag} had delete "${delmsg.content}"`);
-        delmsg.channel.send(`<@${delmsg.author.id}> deleted a message, always think before you send.`);
+        delmsg.channel.send(`<@${delmsg.author.id}>  刪...又刪訊息！`);
         if(delmsg.guild != null){
             let TargetChannel = delmsg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.type === 'text');
             if (TargetChannel && TargetChannel.isText()) {
                 let botlog_msg=`**Deleted Message Log :**\n`;
-                botlog_msg+=`Author: <@${delmsg.author.id}>\nChannel: <#${delmsg.channel.id}>\nCreated Time: ${delmsg.createdAt} \n`;
+                botlog_msg+=`Author: ${delmsg.author.id}\nChannel: <#${delmsg.channel.id}>\nCreated Time: ${delmsg.createdAt} \n`;
                 botlog_msg+=`================================\n${delmsg.content}\n================================\n`;
                 (TargetChannel).send(botlog_msg);
             }
-            else console.log(`'bot-log' channel isn't found`);
+            else {
+                console.log(`'bot-log' channel isn't found`);
+                let botlog_msg=`**Deleted Message Log :**\n`;
+                botlog_msg+=`Author: ${delmsg.author.id}\nChannel: <#${delmsg.channel.id}>\nCreated Time: ${delmsg.createdAt} \n`;
+                botlog_msg+=`================================\n${delmsg.content}\n================================\n`;
+                console.log(botlog_msg);
+            }
         }
     }
     else
