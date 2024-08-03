@@ -128,3 +128,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# secret token
+token.json
+
+# .DS_Store
+.DS_Store
