@@ -161,7 +161,7 @@ client.on('message', msg => {
 });
 
 client.on('messageDelete', delmsg => {
-    if(delmsg.author != null && delmsg.author.id != client.user?.id){
+    if(delmsg.author != null && !delmsg.author.bot){
         console.log(`${delmsg.author.tag} had delete "${delmsg.content}"`);
         delmsg.channel.send(`<@${delmsg.author.id}>  刪...又刪訊息！`);
         if(delmsg.guild != null){
