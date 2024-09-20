@@ -18,7 +18,7 @@ client.on('ready', () => {
 // 當 Bot 接收到訊息時的事件
 client.on('message', msg => {
     if(client.user != null && !msg.author.bot) {
-        console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel.id}`);
+        // console.log(`${client.user.tag} recieved "${msg.content}" from ${msg.author.tag} at ${msg.channel.id}`);
 
         // ping pong time!
         if (msg.content === 'ping') {
