@@ -136,7 +136,7 @@ client.on('message', msg => {
             msg.react('😆');
         }
         //* 抽人
-        if (msg.content.includes('抽')) {
+        if (msg.content.includes('抽一個人') || msg.content.match('抽')) {
             if (msg.guild) {
                 // 獲取所有成員
                 msg.guild.members.fetch().then(() => {
