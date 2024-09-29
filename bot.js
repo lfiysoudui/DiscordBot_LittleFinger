@@ -28,7 +28,7 @@ client.on('message', msg => {
         //* 素質排行
         // 檢查是否包含 bad words
         let containsBadWord = false;
-        if (!msg.content.includes('$rank'))
+        if (!msg.content.includes('$rank') && msg.channel.id != '1234094842695520296')
             badWordsData.words.forEach(word => {
                 if (msg.content.includes(word) && msg.guild) {
                     containsBadWord = true;
