@@ -28,10 +28,11 @@ client.on('message', msg => {
         //* 素質排行
         // 檢查是否包含 bad words
         let containsBadWord = false;
-        if (!msg.content.includes('$rank') && msg.channel.id != '1234094842695520296')
+        if (!msg.content.includes('$rank') && msg.channel.id != '1234094842695520296' && msg.channel.id != '1226539076224811008')
             badWordsData.words.forEach(word => {
                 if (msg.content.includes(word) && msg.guild) {
                     containsBadWord = true;
+                    msg.channel.send(`<@${msg.author.id}>素質真差`);
                     // 記錄到 bot-log 頻道
                     let botLogChannel = msg.guild.channels.cache.find(channel => channel.name === "bot-log" && channel.isText());
                     if (botLogChannel && botLogChannel.isText()) {
