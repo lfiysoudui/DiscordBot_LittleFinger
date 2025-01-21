@@ -5,8 +5,7 @@ const client = new Discord.Client();
 
 // 讀取 bad words JSON 檔案
 let badWordsData = JSON.parse(fs.readFileSync('./badwords.json', 'utf8'));
-// 讀所有圖片 csv
-const fs = require('fs');
+// 讀所有圖片 csvQ
 const csv = require('csv-parser');
 const path = require('path');
 const directoryPath = path.join(__dirname, './image_data');
