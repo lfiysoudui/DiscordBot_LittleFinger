@@ -5,6 +5,66 @@ const client = new Discord.Client();
 
 // 讀取 bad words JSON 檔案
 let badWordsData = JSON.parse(fs.readFileSync('./badwords.json', 'utf8'));
+// 讀所有圖片 csv
+const fs = require('fs');
+const csv = require('csv-parser');
+const path = require('path');
+const directoryPath = path.join(__dirname, './image_data');
+let image_names = []
+let image_links = []
+fs.readdir(directoryPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory', err);
+      return;
+    }
+    // Filter for CSV files and process each
+    files.filter(file => file.endsWith('.csv')).forEach(file => {
+      const rows = [];
+      fs.createReadStream(path.join(directoryPath, file))
+        .pipe(csv())
+        .on('data', (data) => rows.push(data))
+        .on('end', () => {
+            rows.forEach(row => {
+                image_names.push(row.name);
+                image_links.push(row.link)
+            })
+        });
+    });
+});
+
+//找適合的回應圖片
+function LCS_len(X, Y){
+  const m = X.length;
+  const n = Y.length;
+  const L = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (X[i - 1] === Y[j - 1]) {
+        L[i][j] = L[i - 1][j - 1] + 1;
+      } else {
+        L[i][j] = Math.max(L[i - 1][j], L[i][j - 1]);
+      }
+    }
+  }
+  return L[m][n];
+}
+function find_image_reply(message_content) {
+    const n=image_names.length;
+    let mx_lcs_len=0;
+    let mxi = 0;
+    for (let i = 0; i < n; i++) {
+        let lcs_len=LCS_len(message_content, image_names[i]);
+        if(lcs_len>=mx_lcs_len){
+            mx_lcs_len=lcs_len;
+            mxi=i;
+        }
+    }
+    if(mx_lcs_len>=5 || mx_lcs_len==message_content.length){
+        return image_links[mxi];
+    }
+    return null;
+}
 
 // 連上線時的事件
 client.on('ready', () => {
@@ -157,6 +217,11 @@ client.on('message', msg => {
             else {
                 msg.channel.send('這個命令只能在伺服器中使用。');
             }
+        }
+        //* 搜尋圖片
+        link = find_image_reply(msg.content);
+        if (link != null) {
+            msg.channel.send(link);
         }
     }
 });

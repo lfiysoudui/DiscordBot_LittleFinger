@@ -5,3 +5,4 @@
 ## TODOs
 - [ ] 素質排行榜：統計沒素質發言的總數量
 - [x] #⁠語錄評比 裡面只要提到「評比」一詞就按五種表情符號
+- 需要csv parser `npm install csv-parser`
