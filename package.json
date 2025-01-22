@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "csv-parser": "^3.1.0",
     "discord.js": "^12.5.3"
   },
   "name": "dc_bot_littlefinger",
