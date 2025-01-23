@@ -134,3 +134,6 @@ token.json
 
 # .DS_Store
 .DS_Store
+
+package-lock.json
+package.json
