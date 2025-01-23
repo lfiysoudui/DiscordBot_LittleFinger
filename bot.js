@@ -218,9 +218,11 @@ client.on('message', msg => {
             }
         }
         //* 搜尋圖片
-        link = find_image_reply(msg.content);
-        if (link != null) {
-            msg.channel.send(link);
+        if (msg.content.length > 0) {
+            let link = find_image_reply(msg.content);
+            if (link != null) {
+                msg.channel.send(link);
+            }
         }
     }
 });
