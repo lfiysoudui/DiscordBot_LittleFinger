@@ -59,7 +59,7 @@ function find_image_reply(message_content) {
             mxi=i;
         }
     }
-    if(mx_lcs_len>=5 || mx_lcs_len==message_content.length){
+    if((mx_lcs_len>=5 && mx_lcs_len*2 > message_content.length) || mx_lcs_len==message_content.length){
         return image_links[mxi];
     }
     return null;
